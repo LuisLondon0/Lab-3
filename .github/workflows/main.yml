@@ -1,0 +1,49 @@
+name: Laboratorio-3
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          pytest tests/
+
+      - name: Deploy to production
+        if: github.ref == 'refs/heads/main'
+        run: echo "Deployment step placeholder"
+
+      - name: Cache dependencies to speed up workflow
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Notify team on failure
+        if: failure()
+        uses: peter-evans/slack-notify@v1
+        with:
+          status: failure
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
