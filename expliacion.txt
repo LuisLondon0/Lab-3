@@ -1,0 +1,16 @@
+Explicación:
+Uso de Caché para Acelerar el Pipeline:
+En DevOps, es muy común usar caché para evitar la instalación repetida de dependencias o archivos que no cambian con frecuencia. En este ejemplo:
+- name: Cache dependencies to speed up workflow
+Este paso guarda el caché de las dependencias de Python (específicamente los archivos en el directorio ~/.cache/pip). Así, si no hay cambios en el archivo requirements.txt, las dependencias no se instalan de nuevo, lo que acelera el flujo de trabajo.
+
+
+Notificación de Fallos (en Slack, por ejemplo):
+Puedes configurar notificaciones automáticas para que el equipo sea informado cuando algo falle durante el pipeline. En este caso, usamos un webhook de Slack para enviar una notificación en caso de que falle alguna de las etapas del pipeline:
+- name: Notify team on failure
+Si alguna parte del pipeline falla, se envía un mensaje a un canal de Slack para alertar al equipo de desarrollo. Se usa un "secreto" para manejar de manera segura la URL del webhook de Slack.
+
+
+Usando condicionales como if, puedes ejecutar ciertas tareas solo en situaciones específicas. Por ejemplo:
+if: github.ref == 'refs/heads/main'
+Esto asegura que las tareas críticas como el despliegue solo se ejecuten cuando se trabaje en la rama principal.
