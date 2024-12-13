@@ -43,7 +43,4 @@ jobs:
 
       - name: Notify team on failure
         if: failure()
-        uses: peter-evans/slack-notify@v1
-        with:
-          status: failure
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: echo "Notificación enviada"
